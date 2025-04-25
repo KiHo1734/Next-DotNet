@@ -26,8 +26,8 @@ public class JobsController: Controller {
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> AddToJobs(string id, Jobs updatedJob) {
-        await _mongoDBService.AddToJobsAsync(id, updatedJob);
+    public async Task<IActionResult> AddToJobs(string id, [FromBody] Jobs jobs) {
+        await _mongoDBService.AddToJobsAsync(id, jobs);
         return NoContent();
     }
 

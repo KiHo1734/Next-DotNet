@@ -36,4 +36,14 @@ public class MongoDBService {
         await _jobCollection.DeleteOneAsync(filter);
         return;
     }
+
+    internal async Task UpdateAsync(string id, Jobs updatedJob)
+    {
+        throw new NotImplementedException();
+    }
+
+    internal async Task AddToJobsAsync(Jobs jobs)
+    {
+        throw new NotImplementedException();
+    }
 }
