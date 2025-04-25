@@ -15,34 +15,34 @@ public class MongoDBService {
         _jobCollection = database.GetCollection<Jobs>(mongoDBSettings.Value.CollectionName);
     }
 
-    public async Task CreateAsync(Jobs jobs) {
+    public async Task CreateJob(Jobs jobs) {
         await _jobCollection.InsertOneAsync(jobs);
         return;
     }
 
-    public async Task<List<Jobs>> GetAsync() {
+    public async Task<List<Jobs>> GetAllJobs() {
         return await _jobCollection.Find(new BsonDocument()).ToListAsync();
     }
 
-    public async Task AddToJobsAsync(string id, Jobs updatedJob) {
+    public async Task<List<Jobs>> GetJob(string id) {
+        FilterDefinition<Jobs> filter = Builders<Jobs>.Filter.Eq("Id", id);
+        return await _jobCollection.Find(filter).ToListAsync();;
+    }
+
+    public async Task UpdateJob(string id, string title, Jobs updatedJob) {
         FilterDefinition<Jobs> filter = Builders<Jobs>.Filter.Eq("Id", id);
         updatedJob.Id = id;
         await _jobCollection.ReplaceOneAsync(filter, updatedJob);
         return;
     }
 
-    public async Task DeleteAsync(string id) {
+    public async Task DeleteJob(string id) {
         FilterDefinition<Jobs> filter = Builders<Jobs>.Filter.Eq("Id", id);
         await _jobCollection.DeleteOneAsync(filter);
         return;
     }
 
-    internal async Task UpdateAsync(string id, Jobs updatedJob)
-    {
-        throw new NotImplementedException();
-    }
-
-    internal async Task AddToJobsAsync(Jobs jobs)
+    internal async Task UpdateJob(string id, string title, string type, string detail, string? purpose)
     {
         throw new NotImplementedException();
     }

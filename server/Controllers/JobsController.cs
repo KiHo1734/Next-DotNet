@@ -16,24 +16,30 @@ public class JobsController: Controller {
 
     [HttpGet]
     public async Task<List<Jobs>> Get() {
-        return await _mongoDBService.GetAsync();
+        return await _mongoDBService.GetAllJobs();
     }
 
+    [HttpGet("{id}")]
+    public async Task<List<Jobs>> Get(string id) {
+        return await _mongoDBService.GetJob(id);
+    }
+
+
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] Jobs jobs) {
-        await _mongoDBService.CreateAsync(jobs);
-        return CreatedAtAction(nameof(Get), new { id = jobs.Id, jobs});
+    public async Task<IActionResult> Post([FromBody] Jobs job) {
+        await _mongoDBService.CreateJob(job);
+        return CreatedAtAction(nameof(Get), new { id = job.Id, job});
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> AddToJobs(string id, [FromBody] Jobs jobs) {
-        await _mongoDBService.AddToJobsAsync(id, jobs);
+    public async Task<IActionResult> Put(string id, [FromBody] Jobs job) {
+        await _mongoDBService.UpdateJob(id, job.title, job);
         return NoContent();
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(string id) {
-        await _mongoDBService.DeleteAsync(id);
+        await _mongoDBService.DeleteJob(id);
         return NoContent();
     }
 }
