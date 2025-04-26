@@ -15,8 +15,8 @@ public class MongoDBService {
         _jobCollection = database.GetCollection<Jobs>(mongoDBSettings.Value.CollectionName);
     }
 
-    public async Task CreateJob(Jobs jobs) {
-        await _jobCollection.InsertOneAsync(jobs);
+    public async Task CreateJob(Jobs job) {
+        await _jobCollection.InsertOneAsync(job);
         return;
     }
 

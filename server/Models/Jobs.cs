@@ -8,14 +8,15 @@ public class Jobs {
 
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
-    public String? Id { get; set; } 
+    [JsonIgnore]
+    public string? Id { get; set; } 
 
-    public String title { get; set; } = null!;
+    public string title { get; set; } = null!;
 
-    public String type { get; set; } = null!;
+    public string type { get; set; } = null!;
 
-    public String detail { get; set; } = null!;
+    public string detail { get; set; } = null!;
 
-    public String? purpose { get; set; } = null;
+    public string? purpose { get; set; } = null;
 }
 
