@@ -1,22 +1,20 @@
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-using System.Text.Json.Serialization;
+using System.ComponentModel.DataAnnotations;
 
-namespace MongoExample.Models;
+namespace Postgres.Models;
 
-public class Jobs {
+public class Jobs
+{
+    [Key]
+    public int Id { get; set; }  
 
-    [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
-    [JsonIgnore]
-    public string? Id { get; set; } 
+    [Required]
+    public string Title { get; set; } = null!;
 
-    public string title { get; set; } = null!;
+    [Required]
+    public string Type { get; set; } = null!;
 
-    public string type { get; set; } = null!;
+    [Required]
+    public string Detail { get; set; } = null!;
 
-    public string detail { get; set; } = null!;
-
-    public string? purpose { get; set; } = null;
+    public string? Purpose { get; set; }
 }
-

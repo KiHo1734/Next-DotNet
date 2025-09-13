@@ -1,45 +1,54 @@
-using System;
 using Microsoft.AspNetCore.Mvc;
-using MongoExample.Models;
-using MongoExample.Services;
+using Microsoft.EntityFrameworkCore;
+using Postgres.Services;
+using Postgres.Models;
 
-namespace MongoExample.Controllers;
+namespace Postgres.Controllers;
 
-[Controller]
+[ApiController]
 [Route("api/[controller]")]
-public class JobsController: Controller {
-    private readonly MongoDBService _mongoDBService;
+public class JobsController : ControllerBase
+{
+    private readonly JobService _jobService;
 
-    public JobsController(MongoDBService mongoDBService) {
-        _mongoDBService = mongoDBService;
+    public JobsController(JobService jobService)
+    {
+        _jobService = jobService;
     }
 
     [HttpGet]
-    public async Task<List<Jobs>> Get() {
-        return await _mongoDBService.GetAllJobs();
+    public async Task<ActionResult<IEnumerable<Jobs>>> GetJobs()
+    {
+        return await _jobService.GetAll();
     }
 
     [HttpGet("{id}")]
-    public async Task<List<Jobs>> Get(string id) {
-        return await _mongoDBService.GetJob(id);
+    public async Task<ActionResult<Jobs>> GetJob(int id)
+    {
+        var job = await _jobService.GetById(id);
+        if (job == null) return NotFound();
+        return job;
     }
 
-
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] Jobs job) {
-        await _mongoDBService.CreateJob(job);
-        return CreatedAtAction(nameof(Get), new { id = job.Id, job});
+    public async Task<ActionResult<Jobs>> PostJob(Jobs job)
+    {
+        var createdJob = await _jobService.Create(job);
+        return CreatedAtAction(nameof(GetJob), new { id = createdJob.Id }, createdJob);
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Put(string id, [FromBody] Jobs job) {
-        await _mongoDBService.UpdateJob(id, job.title, job);
+    public async Task<IActionResult> PutJob(int id, Jobs job)
+    {
+        job.Id = id; 
+        await _jobService.Update(job);
         return NoContent();
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(string id) {
-        await _mongoDBService.DeleteJob(id);
+    public async Task<IActionResult> DeleteJob(int id)
+    {
+        await _jobService.Delete(id);
         return NoContent();
     }
 }
